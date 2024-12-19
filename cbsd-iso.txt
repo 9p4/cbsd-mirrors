@@ -1,0 +1,6 @@
+# Please use format:
+#
+# <URL1> | contact info, e.g. e-mail
+# <URL2> | contact info, e.g. e-mail
+# ...
+https://mirror2.convectix.com/iso/ | email: olevole@ya.ru
