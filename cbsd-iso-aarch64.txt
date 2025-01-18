@@ -1,0 +1,6 @@
+# Please use the following format (each line is a separate mirror):
+#
+# <URL1> | contact info, e.g. e-mail
+# <URL2> | contact info, e.g. e-mail
+# ...
+https://mirror2.convectix.com/iso-aarch64/ | email: olevole at ya.ru  or Telegam: @olevole

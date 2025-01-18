@@ -27,8 +27,11 @@ Statistics on the number of files and volumes (if you plan to make a full mirror
 
 Images are synchronized using the [RSYNC](https://rsync.samba.org/) utility:
 
-- Origin-server for ISO images: **rsync://mirror.convectix.com/iso/**
-- Origin-server for CLOUD images: **rsync://mirror.convectix.com/cloud/**
+- Origin-server for ISO **x86** images: **rsync://mirror.convectix.com/iso/**
+- Origin-server for ISO **aarch64** images: **rsync://mirror.convectix.com/iso-aarch64/**
+
+- Origin-server for CLOUD **x86** images: **rsync://mirror.convectix.com/cloud/**
+- Origin-server for CLOUD **aarch64** images: **rsync://mirror.convectix.com/cloud-aarch64/**
 - Origin-server for base/rootfs and ([marketplace](https://marketplace.convectix.com) containers): **WIP**
 
 <details>
