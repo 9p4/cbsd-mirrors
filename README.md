@@ -127,6 +127,9 @@ SHELL=/bin/sh
 PATH=/etc:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 */14    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_iso.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/iso/ /usr/local/www/cbsd-mirror/iso/ > /var/log/cbsd_mirror_iso.log 2>&1
 */15    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_cloud.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/cloud/ /usr/local/www/cbsd-mirror/cloud/ > /var/log/cbsd_mirror_cloud.log 2>&1
+# uncomment for aarch64 mirror
+#*/16    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_iso_aarch64.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/iso-aarch64/ /usr/local/www/cbsd-mirror/iso-aarch64/ > /var/log/cbsd_mirror_iso_aarch64.log 2>&1
+#*/17    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_cloud_aarch64.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/cloud-aarch64/ /usr/local/www/cbsd-mirror/cloud-aarch64/ > /var/log/cbsd_mirror_cloud_aarch64.log 2>&1
 EOF
 
 chmod 0600 /var/cron/tabs/nobody
