@@ -61,9 +61,9 @@ sysrc nginx_enable="YES"
 3) Create _/usr/local/www/cbsd-mirror_ directory where we will save ISO images, create a log file for rsync and set the right permissions for the **nobody** user, from which we will synchronize:
 
 ```
-mkdir -p /usr/local/www/cbsd-mirror/iso /usr/local/www/cbsd-mirror/cloud /var/log/nginx
-touch /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log
-chown -R nobody:nobody /usr/local/www/cbsd-mirror /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log
+mkdir -p /usr/local/www/cbsd-mirror/iso /usr/local/www/cbsd-mirror/cloud /usr/local/www/cbsd-mirror/iso-aarch64 /usr/local/www/cbsd-mirror/cloud-aarch64 /var/log/nginx
+touch /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log /var/log/cbsd_mirror_iso_aarch64.log /var/log/cbsd_mirror_cloud_aarch64.log
+chown -R nobody:nobody /usr/local/www/cbsd-mirror /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log /var/log/cbsd_mirror_iso_aarch64.log /var/log/cbsd_mirror_cloud_aarch64.log
 ```
 
 4) Correct **nginx.conf**, specifying **server\_name** as correct name of the server (in this example: **cbsd-mirror.example.com**) and set path to root directory, edit /usr/local/etc/nginx/nginx.conf file like this:
