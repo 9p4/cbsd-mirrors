@@ -27,11 +27,23 @@ Statistics on the number of files and volumes (if you plan to make a full mirror
 
 Images are synchronized using the [RSYNC](https://rsync.samba.org/) utility:
 
-- Origin-server for ISO **x86** images: **rsync://mirror.convectix.com/iso/**
-- Origin-server for ISO **aarch64** images: **rsync://mirror.convectix.com/iso-aarch64/**
+**x86**:
 
+- Origin-server for ISO **x86** images: **rsync://mirror.convectix.com/iso/**
 - Origin-server for CLOUD **x86** images: **rsync://mirror.convectix.com/cloud/**
+
+**ARM/aarch64**:
+
+- Origin-server for ISO **aarch64** images: **rsync://mirror.convectix.com/iso-aarch64/**
 - Origin-server for CLOUD **aarch64** images: **rsync://mirror.convectix.com/cloud-aarch64/**
+
+**RISCV/riscv64**:
+
+- Origin-server for ISO **riscv64** images: **rsync://mirror.convectix.com/iso-riscv64/**
+- Origin-server for CLOUD **riscv64** images: **rsync://mirror.convectix.com/cloud-riscv64/**
+
+**Other**:
+
 - Origin-server for base/rootfs and ([marketplace](https://marketplace.convectix.com) containers): **WIP**
 
 <details>
@@ -61,9 +73,18 @@ sysrc nginx_enable="YES"
 3) Create _/usr/local/www/cbsd-mirror_ directory where we will save ISO images, create a log file for rsync and set the right permissions for the **nobody** user, from which we will synchronize:
 
 ```
-mkdir -p /usr/local/www/cbsd-mirror/iso /usr/local/www/cbsd-mirror/cloud /usr/local/www/cbsd-mirror/iso-aarch64 /usr/local/www/cbsd-mirror/cloud-aarch64 /var/log/nginx
-touch /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log /var/log/cbsd_mirror_iso_aarch64.log /var/log/cbsd_mirror_cloud_aarch64.log
-chown -R nobody:nobody /usr/local/www/cbsd-mirror /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log /var/log/cbsd_mirror_iso_aarch64.log /var/log/cbsd_mirror_cloud_aarch64.log
+mkdir -p /usr/local/www/cbsd-mirror/iso /usr/local/www/cbsd-mirror/cloud \
+    /usr/local/www/cbsd-mirror/iso-aarch64 /usr/local/www/cbsd-mirror/cloud-aarch64 \
+    /usr/local/www/cbsd-mirror/iso-riscv64 /usr/local/www/cbsd-mirror/cloud-riscv64 \
+    /var/log/nginx
+
+touch /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log \
+    /var/log/cbsd_mirror_iso_aarch64.log /var/log/cbsd_mirror_cloud_aarch64.log \
+    /var/log/cbsd_mirror_iso_riscv64.log /var/log/cbsd_mirror_cloud_riscv64.log
+
+chown -R nobody:nobody /usr/local/www/cbsd-mirror /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log \
+    /var/log/cbsd_mirror_iso_aarch64.log /var/log/cbsd_mirror_cloud_aarch64.log \
+    /var/log/cbsd_mirror_iso_riscv64.log /var/log/cbsd_mirror_cloud_riscv64.log
 ```
 
 4) Correct **nginx.conf**, specifying **server\_name** as correct name of the server (in this example: **cbsd-mirror.example.com**) and set path to root directory, edit /usr/local/etc/nginx/nginx.conf file like this:
@@ -127,9 +148,14 @@ SHELL=/bin/sh
 PATH=/etc:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 */14    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_iso.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/iso/ /usr/local/www/cbsd-mirror/iso/ > /var/log/cbsd_mirror_iso.log 2>&1
 */15    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_cloud.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/cloud/ /usr/local/www/cbsd-mirror/cloud/ > /var/log/cbsd_mirror_cloud.log 2>&1
+
 # uncomment for aarch64 mirror
 #*/16    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_iso_aarch64.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/iso-aarch64/ /usr/local/www/cbsd-mirror/iso-aarch64/ > /var/log/cbsd_mirror_iso_aarch64.log 2>&1
 #*/17    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_cloud_aarch64.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/cloud-aarch64/ /usr/local/www/cbsd-mirror/cloud-aarch64/ > /var/log/cbsd_mirror_cloud_aarch64.log 2>&1
+
+# uncomment for riscv64 mirror
+#*/18    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_iso_riscv64.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/iso-riscv64/ /usr/local/www/cbsd-mirror/iso-riscv64/ > /var/log/cbsd_mirror_iso_riscv64.log 2>&1
+#*/19    *       *       *       *       /usr/bin/lockf -s -t0 /tmp/cbsd_mirror_cloud_riscv64.lock /usr/local/bin/rsync -a --delete rsync://mirror.convectix.com/cloud-riscv64/ /usr/local/www/cbsd-mirror/cloud-riscv64/ > /var/log/cbsd_mirror_cloud_riscv64.log 2>&1
 EOF
 
 chmod 0600 /var/cron/tabs/nobody
@@ -169,9 +195,18 @@ systemctl enable nginx
 3) Create _/var/www/cbsd-mirror_ directory where we will save ISO images, create a log file for rsync and set the right permissions for the **nobody** user, from which we will synchronize:
 
 ```
-mkdir -p /var/www/cbsd-mirror/iso /var/www/cbsd-mirror/cloud /var/log/nginx
-touch /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log
-chown -R nobody:nogroup /var/www/cbsd-mirror /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log
+mkdir -p /var/www/cbsd-mirror/iso /var/www/cbsd-mirror/cloud \
+    /var/www/cbsd-mirror/iso-aarch64 /var/www/cbsd-mirror/cloud-aarch64 \
+    /var/www/cbsd-mirror/iso-riscv64 /var/www/cbsd-mirror/cloud-riscv64 \
+    /var/log/nginx
+
+touch /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log \
+    /var/log/cbsd_mirror_iso_aarch64.log /var/log/cbsd_mirror_cloud_aarch64.log \
+    /var/log/cbsd_mirror_iso_riscv64.log /var/log/cbsd_mirror_cloud_riscv64.log
+
+chown -R nobody:nogroup /var/www/cbsd-mirror /var/log/cbsd_mirror_iso.log /var/log/cbsd_mirror_cloud.log \
+    /var/log/cbsd_mirror_iso_aarch64.log /var/log/cbsd_mirror_cloud_aarch64.log \
+    /var/log/cbsd_mirror_iso_riscv64.log /var/log/cbsd_mirror_cloud_riscv64.log
 ```
 
 4) Correct **nginx.conf**, specifying **server\_name** as correct name of the server (in this example: **cbsd-mirror.example.com**) and set path to root directory, edit /etc/nginx/nginx.conf file like this:
@@ -233,6 +268,14 @@ SHELL=/bin/sh
 PATH=/etc:/bin:/sbin:/usr/bin:/usr/sbin:/usr/local/bin:/usr/local/sbin
 */14    *       *       *       *       /usr/bin/flock -w0 -x /tmp/cbsd_mirror_iso.lock /usr/bin/rsync -a --delete rsync://mirror.convectix.com/iso/ /var/www/cbsd-mirror/iso/ > /var/log/cbsd_mirror_iso.log 2>&1
 */15    *       *       *       *       /usr/bin/flock -w0 -x /tmp/cbsd_mirror_cloud.lock /usr/bin/rsync -a --delete rsync://mirror.convectix.com/cloud/ /var/www/cbsd-mirror/cloud/ > /var/log/cbsd_mirror_cloud.log 2>&1
+
+# uncomment for aarch64 mirror
+*/16    *       *       *       *       /usr/bin/flock -w0 -x /tmp/cbsd_mirror_iso_aarch64.lock /usr/bin/rsync -a --delete rsync://mirror.convectix.com/iso-aarch64/ /var/www/cbsd-mirror/iso-aarch64/ > /var/log/cbsd_mirror_iso_aarch64.log 2>&1
+*/17    *       *       *       *       /usr/bin/flock -w0 -x /tmp/cbsd_mirror_cloud_aarch64.lock /usr/bin/rsync -a --delete rsync://mirror.convectix.com/cloud-aarch64/ /var/www/cbsd-mirror/cloud-aarch64/ > /var/log/cbsd_mirror_cloud_aarch64.log 2>&1
+
+# uncomment for riscv64 mirror
+*/18    *       *       *       *       /usr/bin/flock -w0 -x /tmp/cbsd_mirror_iso_riscv64.lock /usr/bin/rsync -a --delete rsync://mirror.convectix.com/iso-riscv64/ /var/www/cbsd-mirror/iso-riscv64/ > /var/log/cbsd_mirror_iso_riscv64.log 2>&1
+*/19    *       *       *       *       /usr/bin/flock -w0 -x /tmp/cbsd_mirror_cloud_riscv64.lock /usr/bin/rsync -a --delete rsync://mirror.convectix.com/cloud-riscv64/ /var/www/cbsd-mirror/cloud-riscv64/ > /var/log/cbsd_mirror_cloud_riscv64.log 2>&1
 EOF
 
 chmod 0600 /var/spool/cron/crontabs/nobody
