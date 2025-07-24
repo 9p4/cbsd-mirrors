@@ -4,3 +4,4 @@
 # <URL2> | contact info, e.g. e-mail
 # ...
 https://mirror2.convectix.com/cloud/ | email: olevole at ya.ru  or Telegam: @olevole
+https://plug-mirror.rcac.purdue.edu/cbsd-cloud | email: plug-mirror@lists.purdue.edu or libera.chat/#plug-mirror
